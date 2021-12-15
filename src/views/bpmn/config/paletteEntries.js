@@ -4,46 +4,54 @@ import {
   attr as svgAttr,
   create as svgCreate
 } from 'tiny-svg'
-
+function createParticipant(event, autoActivate, elementFactory, bpmnFactory, model, create) {
+    create.start(event, elementFactory.createParticipantShape());
+  }
 export default {
-  'create.customtask': createAction(
-    'etl:Task', // etl.json 定义
-    '自定义',
-    'customShape customtask',
-    'Create custom Task',
-    drawCustomTask
-  ),
   'create.start-StartEvent': createAction(
     'bpmn:StartEvent',
     'event',
-    'custom-icon-start-event-none',
+    'bpmn-icon-start-event-none',
     'Create StartEvent'
   ),
   'create.end-event': createAction(
     'bpmn:EndEvent',
     'event',
-    'custom-icon-end-event-none',
+    'bpmn-icon-end-event-none',
     'Create EndEvent'
-  ),
-  'create.task': createAction(
-    'bpmn:Task',
-    'activity',
-    'inShape custom-icon-task',
-    'Create Task',
-    drawTask
   ),
   'create.exclusive-gateway': createAction(
     'bpmn:ExclusiveGateway',
     'gateway',
-    'inShape custom-icon-gateway-none',
+    'bpmn-icon-gateway-none',
     'Create Gateway'
   ),
-  'create.data-object': createAction(
-    'bpmn:DataObjectReference',
-    'data-object',
-    'inShape custom-icon-data-object',
-    'Create DataObjectReference'
-  )
+  'tool-separator': {
+    group: 'tools',
+    separator: true
+  },
+  'create.task': createAction(
+    'bpmn:Task',
+    'activity',
+    'bpmn-icon-user-task',
+    'Create Task',
+    drawTask
+  ),
+  'create.event': createAction(
+    'bpmn:IntermediateCatchEvent',
+    'activity',
+    'bpmn-icon-intermediate-event-catch-timer',
+    'Create Event'
+  ),
+  'create.participant-expanded': {
+      group: 'collaboration',
+      className: 'bpmn-icon-participant',
+      title: 'Create Pool/Participant',
+      action: {
+        dragstart: createParticipant,
+        click: createParticipant
+      }
+    }
 }
 
 function createAction (
